@@ -5,7 +5,7 @@ from prometheus_client.exposition import start_http_server
 from prometheus_client.registry import CollectorRegistry, REGISTRY
 from quasardb import quasardb
 
-from .collector import QdbCollector
+from qdb_prometheus_exporter.collector import QdbCollector
 
 
 class QdbExporter(object):

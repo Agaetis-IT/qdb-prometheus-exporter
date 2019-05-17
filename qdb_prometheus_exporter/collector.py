@@ -5,7 +5,7 @@ import quasardb
 from prometheus_client.core import CounterMetricFamily, GaugeMetricFamily
 from prometheus_client.metrics_core import InfoMetricFamily
 
-from .metrics import MetricType, get_metrics_metadata
+from qdb_prometheus_exporter.metrics import MetricType, get_metrics_metadata
 
 
 class QdbCollector(object):
