@@ -19,8 +19,20 @@ class QdbExporter(object):
         collector_kwargs = dict()
 
         if kwargs.get('qdb_user_name'): qdb_kwargs['user_name'] = kwargs.get('qdb_user_name')
-        if kwargs.get('user_private_key'): qdb_kwargs['user_private_key'] = kwargs.get('qdb_user_private_key')
-        if kwargs.get('cluster_public_key'): qdb_kwargs['cluster_public_key'] = kwargs.get('qdb_cluster_public_key')
+        if kwargs.get('user_private_key'):
+            try:
+                with open(file=kwargs.get('user_private_key'), mode='r') as f:
+                    user_private_key = f.read()
+                    qdb_kwargs['user_private_key'] = user_private_key
+            except Exception:
+                pass
+        if kwargs.get('cluster_public_key'):
+            try:
+                with open(file=kwargs.get('qdb_cluster_public_key'), mode='r') as f:
+                    user_private_key = f.read()
+                    qdb_kwargs['cluster_public_key'] = user_private_key
+            except Exception:
+                pass
 
         if kwargs.get('qdb_max_metrics'): collector_kwargs['max_metrics'] = kwargs.get('qdb_max_metrics')
         if kwargs.get('prefix'): collector_kwargs['prefix'] = kwargs.get('prefix')
@@ -58,11 +70,11 @@ def get_args():
     parser.add_argument("--qdb_user_private_key",
                         dest="qdb_user_private_key",
                         type=str,
-                        help='QuasarDB cluster user private key. Defaults to ""',
+                        help='QuasarDB cluster user private file. Defaults to None',
                         default='')
     parser.add_argument("--qdb_cluster_public_key",
                         dest="qdb_cluster_public_key",
-                        help='QuasarDB cluster user public key. Defaults to ""',
+                        help='QuasarDB cluster user public key file. Defaults to None',
                         type=str,
                         default='')
     parser.add_argument("--qdb_max_metrics",
