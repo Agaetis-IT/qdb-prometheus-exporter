@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  qdb-server:
+    image: bureau14/qdb:3.3.0
+    container_name: qdb-server
+    ports:
+      - 2836:2836
+    environment:
+      QDB_DISABLE_SECURITY: "true"
+      QDB_CONFIG_PATH: "/etc/qdb/qdbd.conf"
+    networks:
+      - qdb-network
+    volumes:
+        - "./qdbd.conf:/etc/qdb/qdbd.conf"
+
+  qdb-sh:
+    image: bureau14/qdbsh:3.3.0
+    container_name: qdb-sh
+    depends_on:
+      - qdb-server
+    networks:
+      - qdb-network
+
+  qdb-prometheus:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    container_name: qdb-prometheus
+    depends_on:
+      - qdb-server
+    networks:
+      - qdb-network
+
+networks:
+  qdb-network:
