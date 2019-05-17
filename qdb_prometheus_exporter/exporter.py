@@ -35,6 +35,7 @@ class QdbExporter(object):
                 pass
 
         if kwargs.get('qdb_max_metrics'): collector_kwargs['max_metrics'] = kwargs.get('qdb_max_metrics')
+        if kwargs.get('qdb_node_id'): collector_kwargs['node_id'] = kwargs.get('qdb_node_id')
         if kwargs.get('prefix'): collector_kwargs['prefix'] = kwargs.get('prefix')
 
         self._cluster = quasardb.Cluster(uri=qdb_uri, **qdb_kwargs)
@@ -62,6 +63,12 @@ def get_args():
                         type=str,
                         help='QuasarDB cluster uri to connect to. Defaults to qdb://127.0.0.1:2836',
                         default='qdb://127.0.0.1:2836')
+    parser.add_argument("--qdb_node_id",
+                        dest="qdb_node_id",
+                        type=str,
+                        help='QuasarDB cluster node id used for statistics collection. Defaults to None',
+                        required=True,
+                        default='0-0-0-0')
     parser.add_argument("--qdb_user_name",
                         dest="qdb_user_name",
                         type=str,
@@ -71,12 +78,12 @@ def get_args():
                         dest="qdb_user_private_key",
                         type=str,
                         help='QuasarDB cluster user private file. Defaults to None',
-                        default='')
+                        default=None)
     parser.add_argument("--qdb_cluster_public_key",
                         dest="qdb_cluster_public_key",
                         help='QuasarDB cluster user public key file. Defaults to None',
                         type=str,
-                        default='')
+                        default=None)
     parser.add_argument("--qdb_max_metrics",
                         dest="qdb_max_metrics",
                         type=int,
@@ -104,6 +111,7 @@ def main():
     args = get_args()
     exporter = QdbExporter(
         qdb_uri=args.qdb_uri,
+        qdb_node_id=args.qdb_node_id,
         qdb_user_name=args.qdb_user_name,
         qdb_user_private_key=args.qdb_user_private_key,
         qdb_cluster_public_key=args.qdb_cluster_public_key,

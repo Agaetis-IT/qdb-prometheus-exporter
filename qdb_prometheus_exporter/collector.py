@@ -9,8 +9,9 @@ from .metrics import MetricType, get_metrics_metadata
 
 
 class QdbCollector(object):
-    def __init__(self, qdb_cluster: quasardb.Cluster, max_metrics: int = 100, prefix: str = 'qdb'):
+    def __init__(self, qdb_cluster: quasardb.Cluster, node_id: str, max_metrics: int = 100, prefix: str = 'qdb'):
         self._cluster = qdb_cluster
+        self._node_id = node_id
         self._max_metrics = max_metrics
         self._hostname = socket.getfqdn()
         self._prefix = prefix
@@ -29,9 +30,6 @@ class QdbCollector(object):
         return value
 
     def collect(self):
-
-        node_id = self.collect_metric(metric_type=MetricType.INFO, metric_key="node_id")
-
         for statistic in self._available_statistics:
             metadata = get_metrics_metadata(statistic)
             name = self.metric_name(statistic)
@@ -43,7 +41,7 @@ class QdbCollector(object):
                                              documentation=metadata['description'],
                                              labels=["node", "host"],
                                              unit=metadata['unit'])
-                metric.add_metric(labels=[node_id, self._hostname],
+                metric.add_metric(labels=[self._node_id, self._hostname],
                                   value=self.collect_metric(metric_type=metadata['type'], metric_key=statistic))
                 yield metric
 
@@ -52,7 +50,7 @@ class QdbCollector(object):
                                            documentation=metadata['description'],
                                            labels=["node", "host"],
                                            unit=metadata['unit'])
-                metric.add_metric(labels=[node_id, self._hostname],
+                metric.add_metric(labels=[self._node_id, self._hostname],
                                   value=self.collect_metric(metric_type=metadata['type'], metric_key=statistic))
                 yield metric
 
@@ -60,7 +58,7 @@ class QdbCollector(object):
                 metric = InfoMetricFamily(name=name,
                                           documentation=metadata['description'],
                                           labels=["node", "host"])
-                metric.add_metric(labels=[node_id, self._hostname],
+                metric.add_metric(labels=[self._node_id, self._hostname],
                                   value={
                                       statistic: self.collect_metric(metric_type=metadata['type'], metric_key=statistic)
                                   })
@@ -75,7 +73,7 @@ class QdbCollector(object):
 
         :return:
         """
-        statistics = self._cluster.prefix_get("$qdb.statistics", self._max_metrics)
+        statistics = self._cluster.prefix_get("$qdb.statistics." + self._node_id, self._max_metrics)
 
         for statistic in statistics:
             self._available_statistics[statistic.split(sep='.', maxsplit=3)[-1]] = statistic
