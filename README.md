@@ -1,11 +1,11 @@
-# QuasarDB Prometheus Exporter
+# QuasarDB Prometheus Exporter
 
 ## Third party libraries
 
 - Prometheus Python Client [https://github.com/prometheus/client_python] 
 - QuasarDB API [https://doc.quasardb.net/master/api/python.html]
 
-## Script arguments
+## Script arguments
 
 - __exporter_http_host__: Exporter HTTP hostname, defaults to '', 
 - __exporter_http_port__: Exporter HTTP port, defaults to 8080, 
