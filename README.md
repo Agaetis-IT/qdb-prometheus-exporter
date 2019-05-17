@@ -16,3 +16,17 @@
 - __qdb_user_name__: QuasarDB username, defaults to `''`, 
 - __qdb_user_private_key__: QuasarDB user private key absolute file path, defaults to `None`
 - __qdb_node_id__: QuasarDB node id to invoke, this value is mandatory and if the node id do not match any of the cluster no statistics while be available., defaults to `'0-0-0-1'`
+
+## Installation
+
+### Pre requisites
+
+- cmake
+- qdb-api=3.3.0-1
+- g++
+
+## Run 
+
+```bash
+qdb-prometheus-exporter --qdb_node_id=0-0-0-1 --qdb_uri=qdb://qdb-server:2836 --exporter_http_port=9090
+```
