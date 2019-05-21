@@ -8,4 +8,4 @@ RUN apt update && \
 
 RUN pip install prometheus_client && \
     pip install wheel && \
-    pip install quasardb==3.3.1
+    pip install quasardb==3.3.2
