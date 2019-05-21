@@ -5,18 +5,10 @@
 from setuptools import setup
 
 # Should equal quasardb api version
-version = "3.3.1"
+version = "3.3.2"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
-
-
-
-
-
-
-
-
 
 setup(
     name="qdb-prometheus-exporter",
@@ -32,7 +24,7 @@ setup(
     long_description_content_type="text/markdown",
     install_requires=[
         "prometheus_client",
-        "quasardb >= 3.3.1"
+        "quasardb >= 3.3.2"
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -44,9 +36,10 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
 
         'Programming Language :: Python :: Implementation',
-        
+
         'Topic :: Database :: Database Engines/Servers',
         'Topic :: Software Development :: Monitoring Tools',
     ],
