@@ -200,6 +200,31 @@ METRICS_METADATA = {
         'description': '',
         'unit'       : 'microseconds'
     },
+    'perf.common.get_range.deserialization.total_ns'            : {
+        'type'       : MetricType.COUNTER,
+        'description': '',
+        'unit'       : 'microseconds'
+    },
+    'perf.common.get_range.processing.total_ns'                 : {
+        'type'       : MetricType.COUNTER,
+        'description': '',
+        'unit'       : 'microseconds'
+    },
+    'perf.common.get_versions.content_reading.total_ns': {
+        'type'       : MetricType.COUNTER,
+        'description': '',
+        'unit'       : 'microseconds'
+    },
+    'perf.common.get_versions.deserialization.total_ns': {
+        'type'       : MetricType.COUNTER,
+        'description': '',
+        'unit'       : 'microseconds'
+    },
+    'perf.common.get_versions.processing.total_ns': {
+        'type'       : MetricType.COUNTER,
+        'description': '',
+        'unit'       : 'microseconds'
+    },
     'perf.common.set_transaction_state.content_reading.total_ns': {
         'type'       : MetricType.COUNTER,
         'description': '',
