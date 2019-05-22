@@ -19,20 +19,20 @@ class QdbExporter(object):
         collector_kwargs = dict()
 
         if kwargs.get('qdb_user_name'): qdb_kwargs['user_name'] = kwargs.get('qdb_user_name')
-        if kwargs.get('user_private_key'):
+        if kwargs.get('qdb_user_private_key'):
             try:
-                with open(file=kwargs.get('user_private_key'), mode='r') as f:
+                with open(file=kwargs.get('qdb_user_private_key'), mode='r') as f:
                     user_private_key = f.read()
                     qdb_kwargs['user_private_key'] = user_private_key
             except Exception:
-                pass
-        if kwargs.get('cluster_public_key'):
+                qdb_kwargs['user_private_key'] = str(kwargs.get('qdb_user_private_key'))
+        if kwargs.get('qdb_cluster_public_key'):
             try:
                 with open(file=kwargs.get('qdb_cluster_public_key'), mode='r') as f:
                     user_private_key = f.read()
                     qdb_kwargs['cluster_public_key'] = user_private_key
             except Exception:
-                pass
+                qdb_kwargs['cluster_public_key'] = str(kwargs.get('qdb_cluster_public_key'))
 
         if kwargs.get('qdb_max_metrics'): collector_kwargs['max_metrics'] = kwargs.get('qdb_max_metrics')
         if kwargs.get('qdb_node_id'): collector_kwargs['node_id'] = kwargs.get('qdb_node_id')
