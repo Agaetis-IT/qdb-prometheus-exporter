@@ -11,7 +11,7 @@ class MetricType(Enum):
     def lookup_function(self, qdb_connection: Cluster):
 
         def string(key: str):
-            return str(qdb_connection.blob(key).get(), "utf-8")
+            return str(qdb_connection.blob(key).get(), "utf-8").rstrip('\0')
 
         def integer(key: str):
             return qdb_connection.integer(key).get()
