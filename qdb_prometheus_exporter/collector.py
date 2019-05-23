@@ -1,4 +1,5 @@
 import logging
+import re
 import socket
 
 import quasardb
@@ -37,13 +38,15 @@ class QdbCollector(object):
 
                 logging.info("Collecting metric %s.", statistic)
 
+                metric_value = self.collect_metric(metric_type=metadata['type'], metric_key=statistic)
+
                 if metadata['type'] == MetricType.COUNTER:
                     metric = CounterMetricFamily(name=name,
                                                  documentation=metadata['description'],
                                                  labels=["node", "host"],
                                                  unit=metadata['unit'])
                     metric.add_metric(labels=[self._node_id, self._hostname],
-                                      value=self.collect_metric(metric_type=metadata['type'], metric_key=statistic))
+                                      value=metric_value)
                     yield metric
 
                 if metadata['type'] == MetricType.GAUGE:
@@ -52,7 +55,7 @@ class QdbCollector(object):
                                                labels=["node", "host"],
                                                unit=metadata['unit'])
                     metric.add_metric(labels=[self._node_id, self._hostname],
-                                      value=self.collect_metric(metric_type=metadata['type'], metric_key=statistic))
+                                      value=metric_value)
                     yield metric
 
                 if metadata['type'] == MetricType.INFO:
@@ -61,7 +64,7 @@ class QdbCollector(object):
                                               labels=["node", "host"])
                     metric.add_metric(labels=[self._node_id, self._hostname],
                                       value={
-                                          statistic: self.collect_metric(metric_type=metadata['type'], metric_key=statistic)
+                                          self.sanitize(statistic): metric_value
                                       })
                     yield metric
             except KeyError as e:
@@ -69,6 +72,9 @@ class QdbCollector(object):
 
     def metric_name(self, metric_key: str):
         return "{}_{}".format(self._prefix, metric_key.replace('.', '_'))
+
+    def sanitize(self, key: str) -> str:
+        return re.sub(r'[^a-zA-Z_]', '_', key)
 
     def retrieve_available_statistics(self):
         """
