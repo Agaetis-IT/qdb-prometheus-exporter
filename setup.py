@@ -5,7 +5,7 @@
 from setuptools import setup
 
 # Should equal quasardb api version
-version = "3.3.2"
+version = "1.0.0"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -27,9 +27,10 @@ setup(
         "quasardb >= 3.3.2"
     ],
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
 
         'Intended Audience :: Developers',
+        'Intended Audience :: System Administrators',
 
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
