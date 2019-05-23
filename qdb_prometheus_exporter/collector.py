@@ -31,38 +31,41 @@ class QdbCollector(object):
 
     def collect(self):
         for statistic in self._available_statistics:
-            metadata = get_metrics_metadata(statistic)
-            name = self.metric_name(statistic)
+            try:
+                metadata = get_metrics_metadata(statistic)
+                name = self.metric_name(statistic)
 
-            logging.info("Collecting metric {}.", statistic)
+                logging.info("Collecting metric %s.", statistic)
 
-            if metadata['type'] == MetricType.COUNTER:
-                metric = CounterMetricFamily(name=name,
-                                             documentation=metadata['description'],
-                                             labels=["node", "host"],
-                                             unit=metadata['unit'])
-                metric.add_metric(labels=[self._node_id, self._hostname],
-                                  value=self.collect_metric(metric_type=metadata['type'], metric_key=statistic))
-                yield metric
+                if metadata['type'] == MetricType.COUNTER:
+                    metric = CounterMetricFamily(name=name,
+                                                 documentation=metadata['description'],
+                                                 labels=["node", "host"],
+                                                 unit=metadata['unit'])
+                    metric.add_metric(labels=[self._node_id, self._hostname],
+                                      value=self.collect_metric(metric_type=metadata['type'], metric_key=statistic))
+                    yield metric
 
-            if metadata['type'] == MetricType.GAUGE:
-                metric = GaugeMetricFamily(name=name,
-                                           documentation=metadata['description'],
-                                           labels=["node", "host"],
-                                           unit=metadata['unit'])
-                metric.add_metric(labels=[self._node_id, self._hostname],
-                                  value=self.collect_metric(metric_type=metadata['type'], metric_key=statistic))
-                yield metric
+                if metadata['type'] == MetricType.GAUGE:
+                    metric = GaugeMetricFamily(name=name,
+                                               documentation=metadata['description'],
+                                               labels=["node", "host"],
+                                               unit=metadata['unit'])
+                    metric.add_metric(labels=[self._node_id, self._hostname],
+                                      value=self.collect_metric(metric_type=metadata['type'], metric_key=statistic))
+                    yield metric
 
-            if metadata['type'] == MetricType.INFO:
-                metric = InfoMetricFamily(name=name,
-                                          documentation=metadata['description'],
-                                          labels=["node", "host"])
-                metric.add_metric(labels=[self._node_id, self._hostname],
-                                  value={
-                                      statistic: self.collect_metric(metric_type=metadata['type'], metric_key=statistic)
-                                  })
-                yield metric
+                if metadata['type'] == MetricType.INFO:
+                    metric = InfoMetricFamily(name=name,
+                                              documentation=metadata['description'],
+                                              labels=["node", "host"])
+                    metric.add_metric(labels=[self._node_id, self._hostname],
+                                      value={
+                                          statistic: self.collect_metric(metric_type=metadata['type'], metric_key=statistic)
+                                      })
+                    yield metric
+            except KeyError as e:
+                logging.error("Key do not exists: %s.", e.args[0])
 
     def metric_name(self, metric_key: str):
         return "{}_{}".format(self._prefix, metric_key.replace('.', '_'))
