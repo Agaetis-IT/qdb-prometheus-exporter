@@ -5,7 +5,7 @@
 from setuptools import setup
 
 # Should equal quasardb api version
-version = "1.0.1"
+version = "master"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
