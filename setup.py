@@ -24,7 +24,7 @@ setup(
     long_description_content_type="text/markdown",
     install_requires=[
         "prometheus_client",
-        "quasardb"
+        "quasardb==3.4.0.dev0"
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
