@@ -68,7 +68,7 @@ class QdbCollector(object):
                                       })
                     yield metric
             except KeyError as e:
-                logging.error("Key do not exists: %s.", e.args[0])
+                logging.warning("Key do not exists: %s.", e.args[0])
 
     def metric_name(self, metric_key: str):
         return "{}_{}".format(self._prefix, metric_key.replace('.', '_'))
