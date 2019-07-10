@@ -19,7 +19,7 @@ setup(
     version=version,
     author="Mickaël GERVAIS",
     author_email="mgervais@agaetis.fr",
-    description="Command line utility to export QuasarDB metricsto Prometheus.",
+    description="Command line utility to export QuasarDB metrics to Prometheus.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=[
