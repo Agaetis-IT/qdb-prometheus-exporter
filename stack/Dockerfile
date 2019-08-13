@@ -13,5 +13,5 @@ RUN apt-get update && \
 
 RUN pip install prometheus_client==0.7.1 && \
     pip install wheel && \
-    pip install quasardb==3.4.0 && \
+    pip install quasardb==3.4.1 && \
     rm -rf /root/.cache
