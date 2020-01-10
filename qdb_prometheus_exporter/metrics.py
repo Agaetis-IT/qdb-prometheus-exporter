@@ -1,6 +1,6 @@
 from enum import Enum
 
-from quasardb.quasardb import Cluster
+from quasardb.quasardb import Node
 
 
 class MetricType(Enum):
@@ -8,13 +8,13 @@ class MetricType(Enum):
     GAUGE = 2
     INFO = 3
 
-    def lookup_function(self, qdb_connection: Cluster):
+    def lookup_function(self, qdb_direct_connection: Node):
 
         def string(key: str):
-            return str(qdb_connection.blob(key).get(), "utf-8").rstrip('\0')
+            return str(qdb_direct_connection.blob(key).get(), "utf-8").rstrip('\0')
 
         def integer(key: str):
-            return qdb_connection.integer(key).get()
+            return qdb_direct_connection.integer(key).get()
 
         if self.value is self.COUNTER.value or self.value is self.GAUGE.value:
             return integer

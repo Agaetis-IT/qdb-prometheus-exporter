@@ -11,6 +11,7 @@ from qdb_prometheus_exporter.collector import QdbCollector
 class QdbExporter(object):
     def __init__(self,
                  qdb_uri: str,
+                 qdb_node: str,
                  registry: CollectorRegistry = REGISTRY,
                  http_host: str = '',
                  http_port: int = 8080,
@@ -34,12 +35,15 @@ class QdbExporter(object):
             except Exception:
                 qdb_kwargs['cluster_public_key'] = str(kwargs.get('qdb_cluster_public_key'))
 
+
         if kwargs.get('qdb_max_metrics'): collector_kwargs['max_metrics'] = kwargs.get('qdb_max_metrics')
-        if kwargs.get('qdb_node_id'): collector_kwargs['node_id'] = kwargs.get('qdb_node_id')
+        if kwargs.get('qdb_prefix_statistics'): collector_kwargs['prefix_statistics'] = kwargs.get('qdb_prefix_statistics')
         if kwargs.get('prefix'): collector_kwargs['prefix'] = kwargs.get('prefix')
 
         self._cluster = quasardb.Cluster(uri=qdb_uri, **qdb_kwargs)
-        self._collector = QdbCollector(qdb_cluster=self._cluster, **collector_kwargs)
+        self._direct_connection = self._cluster.node(qdb_node)
+
+        self._collector = QdbCollector(qdb_direct_connection=self._direct_connection, qdb_node=qdb_node, **collector_kwargs)
 
         self._registry = registry
 
@@ -63,12 +67,12 @@ def get_args():
                         type=str,
                         help='QuasarDB cluster uri to connect to. Defaults to qdb://127.0.0.1:2836',
                         default='qdb://127.0.0.1:2836')
-    parser.add_argument("--qdb_node_id",
-                        dest="qdb_node_id",
+    parser.add_argument("--qdb_node",
+                        dest="qdb_node",
                         type=str,
-                        help='QuasarDB cluster node id used for statistics collection. Defaults to None',
+                        help='QuasarDB cluster direct node used for statistics collection. Defaults to 127.0.0.1:2836',
                         required=True,
-                        default='0-0-0-0')
+                        default='127.0.0.1:2836')
     parser.add_argument("--qdb_user_name",
                         dest="qdb_user_name",
                         type=str,
@@ -89,6 +93,12 @@ def get_args():
                         type=int,
                         help='Max metrics to retrieve from QuasarDB cluster. Defaults to 100',
                         default=200)
+
+    parser.add_argument("--qdb_prefix_statistics",
+                        dest="qdb_prefix_statistics",
+                        help='QuasarDB cluster statistics prefix. Ued to get all statistics by prefix., Default to $qdb.statistics.',
+                        type=str,
+                        default='$qdb.statistics.')
     parser.add_argument("--exporter_http_port",
                         dest="exporter_http_port",
                         type=int,
@@ -108,17 +118,19 @@ def get_args():
 
 
 def main():
-    args = get_args()
-    exporter = QdbExporter(
-        qdb_uri=args.qdb_uri,
-        qdb_node_id=args.qdb_node_id,
-        qdb_user_name=args.qdb_user_name,
-        qdb_user_private_key=args.qdb_user_private_key,
-        qdb_cluster_public_key=args.qdb_cluster_public_key,
-        qdb_max_metrics=args.qdb_max_metrics,
-        http_host=args.exporter_http_host,
-        http_port=args.exporter_http_port,
-        prefix=args.exporter_metric_prefix
-    )
+  args = get_args()
 
-    exporter.start()
+  exporter = QdbExporter(
+      qdb_uri=args.qdb_uri,
+      qdb_node=args.qdb_node,
+      qdb_user_name=args.qdb_user_name,
+      qdb_user_private_key=args.qdb_user_private_key,
+      qdb_cluster_public_key=args.qdb_cluster_public_key,
+      qdb_max_metrics=args.qdb_max_metrics,
+      qdb_prefix_statistics=args.qdb_prefix_statistics,
+      http_host=args.exporter_http_host,
+      http_port=args.exporter_http_port,
+      prefix=args.exporter_metric_prefix
+  )
+
+  exporter.start()

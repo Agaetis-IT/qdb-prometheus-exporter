@@ -1,17 +1,7 @@
 FROM python:3.6
 
-RUN apt-get update && \
-    apt-get install -y \
-      apt-transport-https \
-      ca-certificates \
-      cmake \
-      g++ && \
-    echo "deb [trusted=yes] https://repo.quasardb.net/apt/ /" > /etc/apt/sources.list.d/quasardb.list && \
-    apt-get update && \
-    apt-get install -y qdb-api && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update
 
 RUN pip install prometheus_client==0.7.1 && \
     pip install wheel && \
-    pip install quasardb==3.4.1 && \
-    rm -rf /root/.cache
+    pip install https://s3-eu-west-1.amazonaws.com/download.quasardb.net/quasardb/3.5/3.5.0/api/python/quasardb-3.5.0-cp36-cp36m-linux_x86_64.whl

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_12" default="false" project-jdk-name="Remote Python 3.6.8 Docker Compose (qdb-prometheus at [/media/data/Work/intellij-workspace/ultim/qdb-prometheus-exporter/stack/docker-compose.yml])" project-jdk-type="Python SDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_12" default="false" project-jdk-name="Remote Python 3.6.10 Docker Compose (qdb-prometheus at [D:\Work\IntelliJ\github\agaetis-it\qdb-prometheus-exporter\stack\docker-compose.yml])" project-jdk-type="Python SDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

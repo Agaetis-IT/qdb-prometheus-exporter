@@ -21,9 +21,7 @@
 
 ### Pre requisites
 
-- cmake
-- qdb-api=3.4.0
-- g++
+- qdb-api=3.5.0
 
 ## Run 
 
