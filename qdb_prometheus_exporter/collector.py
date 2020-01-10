@@ -4,12 +4,14 @@ import socket
 
 from prometheus_client.core import CounterMetricFamily, GaugeMetricFamily
 from prometheus_client.metrics_core import InfoMetricFamily
-from quasardb.quasardb import Node
+from quasardb.quasardb import Node, Error as QdbError
 
 from qdb_prometheus_exporter.metrics import MetricType, get_metrics_metadata
 
+
 def sanitize(key: str) -> str:
   return re.sub(r'[^a-zA-Z_]', '_', key)
+
 
 class QdbCollector(object):
   def __init__(self, qdb_direct_connection: Node, qdb_node: str,
@@ -75,6 +77,9 @@ class QdbCollector(object):
           yield metric
       except KeyError as e:
         logging.warning("Key do not exists: %s.", e.args[0])
+      except QdbError as e:
+        logging.error("Connection error with Quasar DB Server", exc_info=True)
+        raise SystemExit
 
   def metric_name(self, metric_key: str):
     return "{}_{}".format(self._prefix, metric_key.replace('.', '_'))
@@ -91,5 +96,5 @@ class QdbCollector(object):
     for statistic in statistics:
       statistic_key = statistic[
                       statistic.startswith(self._prefix_statistics) and len(
-                        self._prefix_statistics):]
+                          self._prefix_statistics):]
       self._available_statistics[statistic_key] = statistic
