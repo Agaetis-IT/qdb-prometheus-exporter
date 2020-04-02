@@ -4,4 +4,4 @@ RUN apt-get update
 
 RUN pip install prometheus_client==0.7.1 && \
     pip install wheel && \
-    pip install https://s3-eu-west-1.amazonaws.com/download.quasardb.net/quasardb/3.5/3.5.0/api/python/quasardb-3.5.0-cp36-cp36m-linux_x86_64.whl
+    pip install https://s3-eu-west-1.amazonaws.com/download.quasardb.net/quasardb/3.7/3.7.0/api/python/quasardb-3.7.0-cp36-cp36m-linux_x86_64.whl

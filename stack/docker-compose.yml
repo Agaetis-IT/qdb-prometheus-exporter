@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   qdb-server:
-    image: bureau14/qdb:3.5
+    image: bureau14/qdb:3.7
     container_name: qdb-server
     ports:
       - 2836:2836
@@ -14,7 +14,7 @@ services:
         - "./qdbd.conf:/etc/qdb/qdbd.conf"
 
   qdb-sh:
-    image: bureau14/qdbsh:3.5
+    image: bureau14/qdbsh:3.7
     container_name: qdb-sh
     depends_on:
       - qdb-server
