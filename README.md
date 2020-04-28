@@ -21,7 +21,7 @@
 
 ### Pre requisites
 
-- qdb-api=3.7.0
+- qdb-api=3.8.1
 
 ## Run 
 
